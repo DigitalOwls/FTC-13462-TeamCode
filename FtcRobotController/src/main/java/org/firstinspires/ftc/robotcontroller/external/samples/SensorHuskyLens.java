@@ -36,6 +36,8 @@ import com.qualcomm.hardware.dfrobot.HuskyLens;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
 
@@ -60,17 +62,22 @@ import java.util.concurrent.TimeUnit;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 @TeleOp(name = "Sensor: HuskyLens", group = "Sensor")
-@Disabled
+//@Disabled
 public class SensorHuskyLens extends LinearOpMode {
 
     private final int READ_PERIOD = 1;
 
     private HuskyLens huskyLens;
+    private Servo servo;
 
     @Override
+
     public void runOpMode()
     {
         huskyLens = hardwareMap.get(HuskyLens.class, "huskylens");
+        servo = hardwareMap.get(Servo.class, "armServo");
+        double servoPosition;
+
 
         /*
          * This sample rate limits the reads solely to allow a user time to observe
@@ -113,9 +120,11 @@ public class SensorHuskyLens extends LinearOpMode {
          *
          * Other algorithm choices for FTC might be: OBJECT_RECOGNITION, COLOR_RECOGNITION or OBJECT_CLASSIFICATION.
          */
-        huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION);
+        huskyLens.selectAlgorithm(HuskyLens.Algorithm.COLOR_RECOGNITION);
 
         telemetry.update();
+        servo.setPosition(1);
+        servoPosition = servo.getPosition();
         waitForStart();
 
         /*
@@ -140,8 +149,11 @@ public class SensorHuskyLens extends LinearOpMode {
              * Returns an empty array if no objects are seen.
              */
             HuskyLens.Block[] blocks = huskyLens.blocks();
-            telemetry.addData("Block count", blocks.length);
-            for (int i = 0; i < blocks.length; i++) {
+            telemetry.addData("Block: ", blocks[0].toString());
+            telemetry.addData("servoPosition: ", servoPosition);
+            telemetry.addData("servoTargetPosition: ", (double) blocks[0].width / blocks[0].height);
+
+            /*for (int i = 0; i < blocks.length; i++) {
                 telemetry.addData("Block", blocks[i].toString());
                 /*
                  * Here inside the FOR loop, you could save or evaluate specific info for the currently recognized Bounding Box:
@@ -151,10 +163,20 @@ public class SensorHuskyLens extends LinearOpMode {
                  * - blocks[i].id                           (Color ID)
                  *
                  * These values have Java type int (integer).
+                 * }
                  */
-            }
 
+
+            if(blocks.length>0)
+            {
+                if(Math.abs(servoPosition- (double) blocks[0].width / blocks[0].height) > 0.1) {
+
+                    servo.setPosition((double) blocks[0].width / blocks[0].height);
+                    servoPosition = servo.getPosition();
+                }
+
+            }
             telemetry.update();
         }
+        }
     }
-}

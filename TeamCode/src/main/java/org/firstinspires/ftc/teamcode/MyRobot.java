@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Arm.Pickup;
 
 public class MyRobot extends Robot {
-    private Pickup pickup;
-    private MecanumDrive drive;
+    public Pickup pickup;
+    public MecanumDrive drive;
     public static Pose2d initialPose;
 
     public enum OpModeType {

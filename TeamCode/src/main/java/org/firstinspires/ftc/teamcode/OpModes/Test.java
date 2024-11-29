@@ -23,16 +23,15 @@ import org.firstinspires.ftc.teamcode.MyRobot;
 
 @Autonomous
 public final class Test extends LinearOpMode {
-    private MecanumDrive drive;
+    //private MecanumDrive drive;
     private MyRobot robot;
     private Pose2d initialPose;
-private Pickup pickup;
     @Override
     public void runOpMode()
     {
         robot = new MyRobot(MyRobot.OpModeType.AUTO_SPECIMEN_RED, hardwareMap);
         initialPose = MyRobot.initialPose;
-        TrajectoryActionBuilder scorePreload = drive.actionBuilder(initialPose)
+        TrajectoryActionBuilder scorePreload = robot.drive.actionBuilder(initialPose)
                 .lineToY(-40);
 
         TrajectoryActionBuilder afterPreloadSpecimen = scorePreload.endTrajectory().fresh()
@@ -48,7 +47,7 @@ private Pickup pickup;
 Command afterPreloadSpecimenCommand = new ActionCommand(afterPreloadSpecimen.build(), null);
 Command scorePreloadCommand = new ActionCommand(scorePreload.build(), null);
 CommandScheduler.getInstance().schedule(
-        new SequentialCommandGroup(scorePreloadCommand, new GrabSpecimen(pickup),afterPreloadSpecimenCommand)
+        new SequentialCommandGroup(scorePreloadCommand, new GrabSpecimen(robot.pickup),afterPreloadSpecimenCommand)
 );
         waitForStart();
 

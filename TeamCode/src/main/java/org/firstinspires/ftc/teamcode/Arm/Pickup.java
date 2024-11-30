@@ -12,15 +12,18 @@ import static org.firstinspires.ftc.teamcode.DConstants.*;
 public class Pickup extends SubsystemBase {
     private final Servo claw;
     private final DcMotorEx pivot;
-    private double pivotkP = 0.5; //needs to be tuned
+    private double pivotkP = 0.75; //needs to be tuned
     PController pivotP = new PController(pivotkP);
 
     public Pickup(HardwareMap hardwareMap) {
-        claw = hardwareMap.get(Servo.class, "clawservo");
-        pivot = hardwareMap.get(DcMotorEx.class, "pivot");
+        claw = hardwareMap.get(Servo.class, "clawServo");
+        pivot = hardwareMap.get(DcMotorEx.class, "swingmotor");
+        resetPivotPositon();
+        pivot.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
     //name should be the same as given in the configuration file
-    public void grabSpecimen() {
+    public void close() {
         claw.setPosition(GRIP_POSITION);
     }
     public void open() {
@@ -29,10 +32,10 @@ public class Pickup extends SubsystemBase {
     public void grabSample() {
 
     }
-    public double getPositon() {
+    public double getClawPosition() {
         return claw.getPosition();
     }
-    public int getPivotPositon() {
+    public int getPivotPosition() {
         return pivot.getCurrentPosition();
     }
     public void stop(DcMotor motor) {
@@ -47,6 +50,18 @@ public class Pickup extends SubsystemBase {
         }
         stop(pivot);
 
+    }
+
+
+    public void resetPivotPositon()
+    {
+        pivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+    public void setPivotPower(float power) {
+        pivot.setPower(power);
+    }
+    public void setPivotMode(DcMotor.RunMode mode) {
+        pivot.setMode(mode);
     }
 
 }

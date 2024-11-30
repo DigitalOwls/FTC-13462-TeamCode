@@ -21,6 +21,8 @@ import org.firstinspires.ftc.teamcode.Arm.Pickup;
 import org.firstinspires.ftc.teamcode.MecanumDrive;
 import org.firstinspires.ftc.teamcode.MyRobot;
 
+import java.util.Set;
+
 @Autonomous
 public final class Test extends LinearOpMode {
     //private MecanumDrive drive;
@@ -43,15 +45,15 @@ public final class Test extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(56, -7.5, Math.toRadians(90)), Math.toRadians(30))
                 .setTangent(Math.toRadians(90))
                 .lineToY(-50)
-                .splineToLinearHeading(new Pose2d(6.5, -35, Math.toRadians(90)), Math.toRadians(75));
-Command afterPreloadSpecimenCommand = new ActionCommand(afterPreloadSpecimen.build(), null);
-Command scorePreloadCommand = new ActionCommand(scorePreload.build(), null);
+                .splineToLinearHeading(new Pose2d(-12, -35, Math.toRadians(90)), Math.toRadians(75));
+Command afterPreloadSpecimenCommand = new ActionCommand(afterPreloadSpecimen.build(), Set.of(robot.pickup));
+Command scorePreloadCommand = new ActionCommand(scorePreload.build(), Set.of(robot.pickup));
 CommandScheduler.getInstance().schedule(
-        new SequentialCommandGroup(scorePreloadCommand, new GrabSpecimen(robot.pickup),afterPreloadSpecimenCommand)
+        new SequentialCommandGroup(scorePreloadCommand /*, new GrabSpecimen(robot.pickup)*/,afterPreloadSpecimenCommand)
 );
         waitForStart();
 
-        while(opModeIsActive()) {
+        while(opModeIsActive() && !isStopRequested()) {
 CommandScheduler.getInstance().run();
 
 

@@ -37,7 +37,7 @@ public class MyRobot extends Robot {
     public void initTele(HardwareMap hardwareMap) {
         pickup = new Pickup(hardwareMap);
 
-            schedule();
+
         }
 
         public void initAuto (HardwareMap hardwareMap, Pose2d startPose) {

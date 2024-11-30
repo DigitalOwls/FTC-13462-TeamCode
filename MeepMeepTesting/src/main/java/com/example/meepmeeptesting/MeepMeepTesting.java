@@ -25,7 +25,7 @@ public class MeepMeepTesting {
                 .splineToLinearHeading(new Pose2d(56, -7.5, Math.toRadians(90)), Math.toRadians(30))
                 .setTangent(Math.toRadians(90))
                 .lineToY(-50)
-                .splineToLinearHeading(new Pose2d(6.5, -35, Math.toRadians(90)), Math.toRadians(75))
+                .splineToLinearHeading(new Pose2d(-12, -35, Math.toRadians(90)), Math.toRadians(75))
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
